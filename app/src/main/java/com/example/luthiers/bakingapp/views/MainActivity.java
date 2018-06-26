@@ -1,4 +1,4 @@
-package com.example.luthiers.bakingapp;
+package com.example.luthiers.bakingapp.views;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.v7.app.AppCompatActivity;
@@ -6,6 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+
+import com.example.luthiers.bakingapp.MainActivityViewModel;
+import com.example.luthiers.bakingapp.R;
+import com.example.luthiers.bakingapp.adapters.RecipesAdapter;
 
 public class MainActivity extends AppCompatActivity {
     

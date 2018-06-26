@@ -1,8 +1,7 @@
-package com.example.luthiers.bakingapp;
+package com.example.luthiers.bakingapp.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.luthiers.bakingapp.R;
 import com.example.luthiers.bakingapp.entities.Recipe;
 
 import java.util.ArrayList;
@@ -30,25 +30,21 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
     
     @Override
     public void onBindViewHolder(@NonNull RecipesViewHolder holder, int position) {
-        Log.d("Recipes", "onBindViewHolder method called");
         holder.bind(mRecipes.get(position));
     }
     
     @Override
     public int getItemCount() {
-        Log.d("Recipes", "getItemCount method called");
         return mRecipes.size();
     }
     
     public void setRecipes(List<Recipe> recipes) {
-        Log.d("Recipes", "setRecipes method called!");
-        
         mRecipes.addAll(recipes);
         
         notifyDataSetChanged();
     }
     
-    class RecipesViewHolder extends RecyclerView.ViewHolder {
+    class RecipesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         
         private ImageView mRecipeImage;
         private TextView mRecipeName, mServings, mIngredients;
@@ -63,8 +59,6 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
         }
         
         void bind(Recipe recipe) {
-            Log.d("Recipes", "Bind method called!");
-            
             mRecipeName.setText(recipe.getName());
             mServings.setText(String.valueOf(recipe.getServings()));
             mIngredients.setText(String.valueOf(recipe.getIngredients().size()));
@@ -77,6 +71,12 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
             Glide.with(view)
                     .load(imageUrl)
                     .into(view);
+        }
+    
+        @Override
+        public void onClick(View v) {
+            //Open a new fragment with each info inside
+            
         }
     }
 }
