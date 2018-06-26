@@ -1,17 +1,38 @@
 package com.example.luthiers.bakingapp.adapters;
 
 import android.support.annotation.NonNull;
-import android.support.v4.view.PagerAdapter;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.View;
 
-public class RecipeDetailPagerAdapter extends PagerAdapter {
-    @Override
-    public int getCount() {
-        return 0;
+import com.example.luthiers.bakingapp.views.recipeDetails.IngredientsFragment;
+import com.example.luthiers.bakingapp.views.recipeDetails.StepsFragment;
+
+public class RecipeDetailPagerAdapter extends FragmentStatePagerAdapter {
+    
+    private int mNumOfTabs;
+    
+    public RecipeDetailPagerAdapter(FragmentManager fm, int numOfTabs) {
+        super(fm);
+        
+        this.mNumOfTabs = numOfTabs;
     }
     
     @Override
-    public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-        return false;
+    public int getCount() {
+        return mNumOfTabs;
+    }
+    
+    @Override
+    public Fragment getItem(int position) {
+        switch (position) {
+            case 0:
+                return new IngredientsFragment();
+            case 1:
+                return new StepsFragment();
+            default:
+                return null;
+        }
     }
 }

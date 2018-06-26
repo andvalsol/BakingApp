@@ -11,12 +11,15 @@ package com.example.luthiers.bakingapp.entities;
  * -> imageUrl: type: String
  */
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.example.luthiers.bakingapp.pojos.Ingredient;
 import com.example.luthiers.bakingapp.pojos.Step;
 
 import java.util.List;
 
-public class Recipe {
+public class Recipe implements Parcelable {
     
     private int mId;
     private String mName;
@@ -36,6 +39,38 @@ public class Recipe {
     }
     
     //Add all the corresponding getters and setters
+    
+    protected Recipe(Parcel in) {
+        mId = in.readInt();
+        mName = in.readString();
+        mServings = in.readInt();
+        mImageUrl = in.readString();
+    }
+    
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(mId);
+        dest.writeString(mName);
+        dest.writeInt(mServings);
+        dest.writeString(mImageUrl);
+    }
+    
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+    
+    public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
+        @Override
+        public Recipe createFromParcel(Parcel in) {
+            return new Recipe(in);
+        }
+        
+        @Override
+        public Recipe[] newArray(int size) {
+            return new Recipe[size];
+        }
+    };
     
     public int getId() {
         return mId;

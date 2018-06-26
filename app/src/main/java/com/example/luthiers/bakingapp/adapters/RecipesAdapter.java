@@ -19,6 +19,11 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
     
     //Create a list to store the list of recipes
     private List<Recipe> mRecipes = new ArrayList<>();
+    private RecipesOnClickListener mRecipesOnClickListener;
+    
+    public RecipesAdapter(RecipesOnClickListener recipesOnClickListener) {
+        mRecipesOnClickListener = recipesOnClickListener;
+    }
     
     @NonNull
     @Override
@@ -44,7 +49,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
         notifyDataSetChanged();
     }
     
-    class RecipesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class RecipesViewHolder extends RecyclerView.ViewHolder {
         
         private ImageView mRecipeImage;
         private TextView mRecipeName, mServings, mIngredients;
@@ -56,6 +61,8 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
             mRecipeName = itemView.findViewById(R.id.tv_recipe_name);
             mServings = itemView.findViewById(R.id.tv_servings);
             mIngredients = itemView.findViewById(R.id.tv_ingredients);
+            
+            itemView.setOnClickListener(v -> mRecipesOnClickListener.recipesOnClick(mRecipes.get(getAdapterPosition())));
         }
         
         void bind(Recipe recipe) {
@@ -72,11 +79,9 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
                     .load(imageUrl)
                     .into(view);
         }
+    }
     
-        @Override
-        public void onClick(View v) {
-            //Open a new fragment with each info inside
-            
-        }
+    public interface RecipesOnClickListener {
+        void recipesOnClick(Recipe recipe);
     }
 }
