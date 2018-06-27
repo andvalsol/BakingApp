@@ -8,5 +8,5 @@
     <string name="steps">Steps</string>
     <string name="recipe">recipe</string>
     <string name="ingredient_format">%s %s of %s</string>
-    <string name="image_thumbnail">Steps image thumbnail</string>
+    <string name="image_thumbnail">Step image thumbnail</string>
 </resources>
