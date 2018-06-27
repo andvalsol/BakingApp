@@ -24,18 +24,18 @@ public class MainFragment extends Fragment implements RecipesAdapter.RecipesOnCl
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
-    
-    
+        View view = inflater.inflate(R.layout.recycler_view, container, false);
+        
+        
         //Initialize the adapter
         RecipesAdapter recipesAdapter = new RecipesAdapter(this);
-    
+        
         //Initialize the recycler view
-        RecyclerView recyclerView = view.findViewById(R.id.rv_recipes_list);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         //The size of each item from the recycler won't change, so set the value to true, to let recycler view make optimizations with the layout
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(recipesAdapter);
-    
+        
         //Initialize the MainActivityViewModel
         MainActivityViewModel mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
         //Get the recipes from the MainActivityViewModel
@@ -50,8 +50,9 @@ public class MainFragment extends Fragment implements RecipesAdapter.RecipesOnCl
         Bundle bundle = new Bundle();
         bundle.putParcelable(getString(R.string.recipe), recipe);
         
-        // Create new fragment and transaction
+        // Create new fragment, add the bundle to the fragment
         RecipeDetail recipeDetail = new RecipeDetail();
+        recipeDetail.setArguments(bundle);
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         
         transaction.replace(R.id.fragment_container, recipeDetail);

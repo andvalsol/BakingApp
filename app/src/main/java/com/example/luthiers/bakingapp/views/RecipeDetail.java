@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.example.luthiers.bakingapp.R;
 import com.example.luthiers.bakingapp.adapters.RecipeDetailPagerAdapter;
+import com.example.luthiers.bakingapp.entities.Recipe;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,7 +25,7 @@ public class RecipeDetail extends Fragment {
         View view = inflater.inflate(R.layout.fragment_recipe_detail, container, false);
         
         ViewPager viewPager = view.findViewById(R.id.pager);
-    
+        
         //Add the tabs
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText(R.string.ingredients));
@@ -47,9 +48,12 @@ public class RecipeDetail extends Fragment {
             }
         });
         
+        Recipe recipe = getArguments().getParcelable(getString(R.string.recipe));
         
         //Set the adapter to the view pager
-        viewPager.setAdapter(new RecipeDetailPagerAdapter(getActivity().getSupportFragmentManager(), tabLayout.getTabCount()));
+        viewPager.setAdapter(new RecipeDetailPagerAdapter(getActivity().getSupportFragmentManager(),
+                tabLayout.getTabCount(),
+                recipe));
         
         return view;
     }
