@@ -40,7 +40,7 @@ public class Recipe implements Parcelable {
     
     //Add all the corresponding getters and setters
     
-    protected Recipe(Parcel in) {
+    private Recipe(Parcel in) {
         mId = in.readInt();
         mName = in.readString();
         mServings = in.readInt();

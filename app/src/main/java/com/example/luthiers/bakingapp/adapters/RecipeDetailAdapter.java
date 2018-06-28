@@ -2,6 +2,7 @@ package com.example.luthiers.bakingapp.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +22,14 @@ public class RecipeDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private List<Step> mSteps;
     private String mIngredients;
     private int numIngredients;
+    private StepsClickListener mStepsClickListener;
     
-    public RecipeDetailAdapter(List<Step> steps, List<Ingredient> ingredients) {
+    public RecipeDetailAdapter(List<Step> steps, List<Ingredient> ingredients, StepsClickListener stepsClickListener) {
         //Set the steps list and also the number of ingredients
         numIngredients = ingredients.size();
         mSteps = steps;
+        
+        mStepsClickListener = stepsClickListener;
         
         //Use the concatenateIngredients to append each ingredient into a single String
         concatenateIngredients(ingredients);
@@ -97,6 +101,12 @@ public class RecipeDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             super(itemView);
             
             mVideoThumbnail = itemView.findViewById(R.id.iv_step);
+            mVideoThumbnail.setOnClickListener(v -> {
+    
+                Log.d("Steps", "The adapter position is: " + getAdapterPosition());
+                mStepsClickListener.StepOnClick(mSteps.get(getAdapterPosition() - 1)); //We have to remove one since the first position comes from the ingredients
+            });
+            
             mShortDescription = itemView.findViewById(R.id.tv_short_description);
         }
         
@@ -127,5 +137,10 @@ public class RecipeDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             
             mIngredient.setText(ingredients);
         }
+    }
+    
+    public interface StepsClickListener {
+        
+        void StepOnClick(Step step);
     }
 }

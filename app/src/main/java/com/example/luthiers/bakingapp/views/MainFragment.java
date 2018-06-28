@@ -51,11 +51,11 @@ public class MainFragment extends Fragment implements RecipesAdapter.RecipesOnCl
         bundle.putParcelable(getString(R.string.recipe), recipe);
         
         // Create new fragment, add the bundle to the fragment
-        RecipeDetail recipeDetail = new RecipeDetail();
-        recipeDetail.setArguments(bundle);
+        RecipeDetailFragment recipeDetailFragment = new RecipeDetailFragment();
+        recipeDetailFragment.setArguments(bundle);
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         
-        transaction.replace(R.id.fragment_container, recipeDetail);
+        transaction.replace(R.id.fragment_container, recipeDetailFragment);
         transaction.addToBackStack(null);
         
         // Commit the transaction

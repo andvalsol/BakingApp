@@ -1,6 +1,9 @@
 package com.example.luthiers.bakingapp.pojos;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /*
 * This pojo needs:
 * -> id: type: int
@@ -9,7 +12,7 @@ package com.example.luthiers.bakingapp.pojos;
 * -> videoURL: type: String
 * -> thumbnailURL: type: String
 */
-public class Step {
+public class Step implements Parcelable{
     
     private int mId;
     private String mShortDescription;
@@ -28,8 +31,25 @@ public class Step {
         mThumbnailURL = thumbnailURL;
     }
     
-    //Add all getters and setters
+    private Step(Parcel in) {
+        mId = in.readInt();
+        mShortDescription = in.readString();
+        mDescription = in.readString();
+        mVideoURL = in.readString();
+        mThumbnailURL = in.readString();
+    }
     
+    public static final Creator<Step> CREATOR = new Creator<Step>() {
+        @Override
+        public Step createFromParcel(Parcel in) {
+            return new Step(in);
+        }
+        
+        @Override
+        public Step[] newArray(int size) {
+            return new Step[size];
+        }
+    };
     
     public int getId() {
         return mId;
@@ -71,4 +91,17 @@ public class Step {
         mThumbnailURL = thumbnailURL;
     }
     
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+    
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(mId);
+        dest.writeString(mShortDescription);
+        dest.writeString(mDescription);
+        dest.writeString(mVideoURL);
+        dest.writeString(mThumbnailURL);
+    }
 }
