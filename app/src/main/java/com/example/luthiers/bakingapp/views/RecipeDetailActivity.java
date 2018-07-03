@@ -55,7 +55,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
         
         //Since it's in two pane mode, set the MediaFragment in the fl_recipe_detail_container fragment container
         mFragmentManager.beginTransaction()
-                .add(R.id.fl_recipe_detail_container, new MediaFragment())
+                .add(R.id.fl_recipe_detail_container, mediaFragment)
                 .commit();
     }
     

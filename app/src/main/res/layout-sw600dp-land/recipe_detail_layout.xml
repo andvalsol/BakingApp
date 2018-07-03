@@ -6,16 +6,15 @@
     android:orientation="horizontal"
     android:showDividers="middle">
 
-    <include xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/custom_title_layout"
-        layout="@layout/recycler_view"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="250dp"
         android:layout_height="match_parent" />
 
     <!--Add the container for the media fragment-->
     <FrameLayout
         android:id="@+id/fl_recipe_detail_container"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
 </LinearLayout>
