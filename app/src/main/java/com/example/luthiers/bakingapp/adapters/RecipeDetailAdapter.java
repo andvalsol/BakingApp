@@ -9,10 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.luthiers.bakingapp.R;
 import com.example.luthiers.bakingapp.pojos.Ingredient;
 import com.example.luthiers.bakingapp.pojos.Step;
+import com.example.luthiers.bakingapp.utils.AsyncTaskCacheBitmap;
+import com.example.luthiers.bakingapp.utils.GlideClass;
 
 import java.util.List;
 
@@ -102,7 +103,7 @@ public class RecipeDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             
             mVideoThumbnail = itemView.findViewById(R.id.iv_step);
             mVideoThumbnail.setOnClickListener(v -> {
-    
+                
                 Log.d("Steps", "The adapter position is: " + getAdapterPosition());
                 mStepsClickListener.StepOnClick(mSteps.get(getAdapterPosition() - 1)); //We have to remove one since the first position comes from the ingredients
             });
@@ -114,9 +115,23 @@ public class RecipeDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             //Add the short description to the mShortDescription text view
             mShortDescription.setText(step.getShortDescription());
             
-            //Set the video thumbnail to the mVideoThumbnail image view
-            Glide.with(mVideoThumbnail).load(step.getThumbnailURL()).into(mVideoThumbnail);
+            //Set the video thumbnail as a preview for the video
+            setVideoThumbnail(step, mVideoThumbnail);
         }
+    }
+    
+    private void setVideoThumbnail(Step step, ImageView imageView) {
+        /*
+         * There are two url from which we can get the thumbnail from:
+         * 1- VideoUrl => using the AsyncTaskCacheBitmap
+         * 2- ThumbnailUrl => using Glide by default
+         * */
+        
+        Log.i("Step", "the thumbnail is: " + step.getThumbnailURL() + ", and the video url is: " + step.getVideoURL());
+        if (!step.getThumbnailURL().isEmpty()) {
+            GlideClass.setVideoThumbnail(step.getThumbnailURL(), imageView);
+        }
+        else AsyncTaskCacheBitmap.getVideoFrameFromUrl(step.getVideoURL(), imageView);
     }
     
     class IngredientsViewHolder extends RecyclerView.ViewHolder {

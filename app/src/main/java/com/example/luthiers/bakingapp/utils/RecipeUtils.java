@@ -31,7 +31,7 @@ public class RecipeUtils {
     private static final String STEP_SHORT_DESCRIPTION = "shortDescription";
     private static final String STEP_DESCRIPTION = "description";
     private static final String STEP_VIDEO_URL = "videoURL";
-    private static final String STEP_THUMBNAIL_URL = "thumbnail_url";
+    private static final String STEP_THUMBNAIL_URL = "thumbnailURL";
     
     //Get a recipe pojo from the json string
     public static List<Recipe> getRecipesFromJsonResponse(String jsonResponse) {

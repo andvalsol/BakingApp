@@ -29,7 +29,7 @@ public class Step implements Parcelable{
         mThumbnailURL = thumbnailURL;
     }
     
-    protected Step(Parcel in) {
+    private Step(Parcel in) {
         mId = in.readInt();
         mShortDescription = in.readString();
         mDescription = in.readString();
