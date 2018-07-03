@@ -9,7 +9,8 @@
     <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/pv_exo_player"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="300dp"
+        android:background="@android:color/black" />
 
     <TextView
         android:id="@+id/tv_step_description"

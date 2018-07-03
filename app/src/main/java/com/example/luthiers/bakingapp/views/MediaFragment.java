@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,37 +32,42 @@ public class MediaFragment extends Fragment {
     private Step mStep;
     private PlayerView mPlayerView;
     private ExoPlayer mExoPlayer;
-    
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        
-        //Check if we're getting a bundle information
-        if (getArguments() != null && getArguments().getParcelable("step") != null) {
-            mStep = getArguments().getParcelable("step");
-            
-            Log.d("Step", "the step video url is: " + mStep.getVideoURL());
-        }
-    }
+    private TextView mTvDescription;
     
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        
         View view = inflater.inflate(R.layout.fragment_media, container, false);
         
         //Initialize the Exo Player view
         mPlayerView = view.findViewById(R.id.pv_exo_player);
         
         //Check that the mStep instance and the tv_step_description are not null
-        TextView tvDescription = view.findViewById(R.id.tv_step_description);
+        mTvDescription = view.findViewById(R.id.tv_step_description);
         
-        if (mStep != null && tvDescription != null) {
-            tvDescription.setText(mStep.getDescription());
-        }
+        if (isPortraitMode()) setPortraitView();
+        else setLandscapeView();
         
         return view;
+    }
+    
+    public void setStep(Step step) {
+        mStep = step;
+    }
+    
+    private boolean isPortraitMode() {
+        return mTvDescription != null;
+    }
+    
+    private void setLandscapeView() {
+        //Hide the action bar
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+    }
+    
+    private void setPortraitView() {
+        //Set the description of the video
+        if (mStep != null) mTvDescription.setText(mStep.getDescription());
     }
     
     @Override

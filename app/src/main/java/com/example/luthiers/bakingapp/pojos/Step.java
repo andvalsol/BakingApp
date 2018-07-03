@@ -21,8 +21,6 @@ public class Step implements Parcelable{
     private String mThumbnailURL;
     
     //Add a public constructor
-    
-    
     public Step(int id, String shortDescription, String description, String videoURL, String thumbnailURL) {
         mId = id;
         mShortDescription = shortDescription;
@@ -31,7 +29,7 @@ public class Step implements Parcelable{
         mThumbnailURL = thumbnailURL;
     }
     
-    private Step(Parcel in) {
+    protected Step(Parcel in) {
         mId = in.readInt();
         mShortDescription = in.readString();
         mDescription = in.readString();
@@ -98,6 +96,7 @@ public class Step implements Parcelable{
     
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+    
         dest.writeInt(mId);
         dest.writeString(mShortDescription);
         dest.writeString(mDescription);

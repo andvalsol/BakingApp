@@ -38,26 +38,13 @@ public class Recipe implements Parcelable {
         mImageUrl = imageUrl;
     }
     
-    //Add all the corresponding getters and setters
-    
     private Recipe(Parcel in) {
         mId = in.readInt();
         mName = in.readString();
+        mIngredients = in.createTypedArrayList(Ingredient.CREATOR);
+        mSteps = in.createTypedArrayList(Step.CREATOR);
         mServings = in.readInt();
         mImageUrl = in.readString();
-    }
-    
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(mId);
-        dest.writeString(mName);
-        dest.writeInt(mServings);
-        dest.writeString(mImageUrl);
-    }
-    
-    @Override
-    public int describeContents() {
-        return 0;
     }
     
     public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
@@ -120,4 +107,18 @@ public class Recipe implements Parcelable {
         mImageUrl = imageUrl;
     }
     
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+    
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(mId);
+        dest.writeString(mName);
+        dest.writeTypedList(mIngredients);
+        dest.writeTypedList(mSteps);
+        dest.writeInt(mServings);
+        dest.writeString(mImageUrl);
+    }
 }
