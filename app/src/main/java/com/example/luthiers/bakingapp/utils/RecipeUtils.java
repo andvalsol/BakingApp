@@ -118,7 +118,7 @@ public class RecipeUtils {
      * Since we can not use Room because Room makes all tha calls in background services,
      * We can get the list of ingredients from the SharedPreferences
      * */
-    public static Recipe getRecipe(Context context) {
+    public static Recipe getRecipeFromJson(String jsonRecipe) {
         //Create a new Gson object, Gson is the fastest library to get small sets of Json data
         Gson gson = new Gson();
         
@@ -126,23 +126,13 @@ public class RecipeUtils {
         Type type = new TypeToken<Recipe>() {
         }.getType();
         
-        //Initialize a SharedPreferences object
-        SharedPreferences sharedPreferences = context.getSharedPreferences(BuildConfig.APPLICATION_ID, MODE_PRIVATE);
-        String jsonRecipe = sharedPreferences.getString(AppWidgetManager.EXTRA_APPWIDGET_ID, "");
-        
         return gson.fromJson(jsonRecipe, type);
     }
     
-    @SuppressLint("ApplySharedPref") //We need to use apply since we need a linear logic
-    public static void saveRecipeInSharedPrefs(Context context, Recipe recipe) {
+    public static String getJsonFromRecipe(Recipe recipe) {
         //Create a new Gson object, Gson is the fastest library to get small sets of Json data
         Gson gson = new Gson();
-        
-        String jsonRecipe = gson.toJson(recipe);
-        
-        SharedPreferences sharedPreferences = context.getSharedPreferences(BuildConfig.APPLICATION_ID, MODE_PRIVATE);
-        sharedPreferences.edit()
-                .putString(AppWidgetManager.EXTRA_APPWIDGET_ID, jsonRecipe) //Save the correspond recipeId under the correspond widgetId
-                .commit();
+    
+        return gson.toJson(recipe);
     }
 }

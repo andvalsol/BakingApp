@@ -2,9 +2,5 @@
 <resources>
     <dimen name="grid_item_max_size">160dp</dimen>
 
-    <!--
-Refer to App Widget Documentation for margin information
-http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
-    -->
-    <dimen name="widget_size">110dp</dimen>
+    <dimen name="widget_size">180dp</dimen> <!--Using the formula (n * 70) - 30, n -> number of cells we want to use-->
 </resources>
