@@ -14,8 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeUtils {
+    //For each recipe
+    public static final String ID = "id"; //Make it a public field since it's used by the MainActivity
     
-    private static final String ID = "id";
     private static final String RECIPE_NAME = "name";
     private static final String RECIPE_LIST_OF_INGREDIENTS = "ingredients";
     private static final String RECIPE_STEPS = "steps";

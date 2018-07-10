@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--We don't need a widget that updates itself, since we just want to add-->
+<!--a quick access for a certain recipe-->
+
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:initialKeyguardLayout="@layout/baking_app_widget"
+    android:initialLayout="@layout/baking_app_widget"
+    android:minHeight="@dimen/widget_size"
+    android:minWidth="@dimen/widget_size"
+    android:previewImage="@drawable/ic_launcher_foreground"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen" />

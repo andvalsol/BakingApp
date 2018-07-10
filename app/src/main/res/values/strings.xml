@@ -7,4 +7,6 @@
     <string name="recipe">recipe</string>
     <string name="ingredient_format">%s %s of %s</string>
     <string name="image_thumbnail">Step image thumbnail</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>

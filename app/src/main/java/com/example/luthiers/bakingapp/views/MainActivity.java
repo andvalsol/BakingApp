@@ -1,26 +1,42 @@
 package com.example.luthiers.bakingapp.views;
 
+import android.appwidget.AppWidgetManager;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.support.v4.app.FragmentTransaction;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
+import com.example.luthiers.bakingapp.BuildConfig;
 import com.example.luthiers.bakingapp.MainActivityViewModel;
 import com.example.luthiers.bakingapp.R;
 import com.example.luthiers.bakingapp.adapters.RecipesAdapter;
 import com.example.luthiers.bakingapp.entities.Recipe;
+import com.example.luthiers.bakingapp.utils.RecipeUtils;
 
 public class MainActivity extends AppCompatActivity implements RecipesAdapter.RecipesOnClickListener {
+    
+    private boolean mToWidget;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recycler_view);
+    
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            //The user has entered this activity to set a determined recipe as a widget
+            mToWidget = true;
+            int mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+    
+            Log.i("WidgetId", "2The id for the widget is: " + mAppWidgetId);
+        }
     
         //Initialize the adapter
         RecipesAdapter recipesAdapter = new RecipesAdapter(this);
@@ -62,9 +78,22 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Re
     
     @Override
     public void recipesOnClick(Recipe recipe) {
-        //Create an intent to open the RecipeDetailActivity with the extra parcelable Recipe POJO
-        Intent intent = new Intent(this, RecipeDetailActivity.class);
-        intent.putExtra("recipe", recipe);
-        startActivity(intent);
+        //Check if the user wants to open the recipe or wants to set the recipe as a widget
+        if (!mToWidget) {
+            //Create an intent to open the RecipeDetailActivity with the extra parcelable Recipe POJO
+            Intent intent = new Intent(this, RecipeDetailActivity.class);
+            intent.putExtra("recipe", recipe);
+            startActivity(intent);
+        } else {
+            SharedPreferences sharedPreferences = getSharedPreferences(BuildConfig.APPLICATION_ID, MODE_PRIVATE);
+            sharedPreferences.edit()
+                    .putInt(RecipeUtils.ID, recipe.getId())
+                    .apply();
+            
+            //Create an intent so that we can send the broadcast to the BakingAppWidgetProvider
+            Intent intent = new Intent(this, BakingAppWidgetProvider.class);
+            intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+            sendBroadcast(intent);
+        }
     }
 }

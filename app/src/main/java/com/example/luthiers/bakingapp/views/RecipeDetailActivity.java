@@ -1,5 +1,6 @@
 package com.example.luthiers.bakingapp.views;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,17 +16,16 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
     
     private Recipe mRecipe;
     private FragmentManager mFragmentManager;
+    private boolean mIsTwoPane;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recipe_detail_layout);
-    
-        //Check if there are any information passed to this activity
-        if (getIntent() != null && getIntent().getExtras().getParcelable("recipe") != null) {
-            mRecipe = getIntent().getExtras().getParcelable("recipe");
-        }
         
+        //Set recipe if any bundle is passed to this activity
+        setRecipe();
+    
         //Create an instance of the RecipeDetailAdapter
         RecipeDetailAdapter recipeDetailAdapter = new RecipeDetailAdapter(mRecipe.getSteps(), mRecipe.getIngredients(), this);
         
@@ -40,10 +40,17 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
         mFragmentManager = getSupportFragmentManager();
         
         //Check if we have a two pane mode or not
-        boolean isTwoPane = isTwoPane();
+        mIsTwoPane = isTwoPane();
         
-        if (isTwoPane) {
+        if (mIsTwoPane) {
             addMediaFragment(mRecipe.getSteps().get(0));
+        }
+    }
+    
+    private void setRecipe() {
+        //Check if there are any information passed to this activity
+        if (getIntent() != null && getIntent().getExtras().getParcelable("recipe") != null) {
+            mRecipe = getIntent().getExtras().getParcelable("recipe");
         }
     }
     
@@ -65,6 +72,14 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
     
     @Override
     public void StepOnClick(Step step) {
-        addMediaFragment(step);
+        //Check if we've a two pane mode or not
+        if (mIsTwoPane) addMediaFragment(step);
+        else openMediaActivity(step);
+    }
+    
+    private void openMediaActivity(Step step) {
+        Intent intent = new Intent(this, MediaActivity.class);
+        intent.putExtra("step", step);
+        startActivity(intent);
     }
 }
