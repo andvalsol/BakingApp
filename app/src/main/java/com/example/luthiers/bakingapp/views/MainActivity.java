@@ -21,21 +21,19 @@ import com.example.luthiers.bakingapp.utils.RecipeUtils;
 
 public class MainActivity extends AppCompatActivity implements RecipesAdapter.RecipesOnClickListener {
     
-    private boolean mToWidget;
-    
+    private int mAppWidgetId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recycler_view);
     
+        
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
             //The user has entered this activity to set a determined recipe as a widget
-            mToWidget = true;
-            int mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-    
-            Log.i("WidgetId", "2The id for the widget is: " + mAppWidgetId);
+            mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
         }
     
         //Initialize the adapter
@@ -60,6 +58,13 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Re
         });
     }
     
+    @Override
+    protected void onStart() {
+        super.onStart();
+    
+        Log.d("MainActivity.", "MainActivity started");
+    }
+    
     private int setGridColumns() {
         //Set the maximum size for the grid item
         int gridItemMaxSize = getResources().getDimensionPixelSize(R.dimen.grid_item_max_size); //Max grid item is set as 160dp
@@ -79,21 +84,31 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Re
     @Override
     public void recipesOnClick(Recipe recipe) {
         //Check if the user wants to open the recipe or wants to set the recipe as a widget
-        if (!mToWidget) {
+        if (mAppWidgetId == 0) {
             //Create an intent to open the RecipeDetailActivity with the extra parcelable Recipe POJO
             Intent intent = new Intent(this, RecipeDetailActivity.class);
             intent.putExtra("recipe", recipe);
             startActivity(intent);
         } else {
-            SharedPreferences sharedPreferences = getSharedPreferences(BuildConfig.APPLICATION_ID, MODE_PRIVATE);
-            sharedPreferences.edit()
-                    .putInt(RecipeUtils.ID, recipe.getId())
-                    .apply();
+            RecipeUtils.saveRecipeInSharedPrefs(this, recipe);
             
-            //Create an intent so that we can send the broadcast to the BakingAppWidgetProvider
-            Intent intent = new Intent(this, BakingAppWidgetProvider.class);
-            intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-            sendBroadcast(intent);
+            createWidgetIntent();
+            
+            //Finish the activity and all its back stack
+            setResult(RESULT_CANCELED);
+            finishAffinity();
         }
+    }
+    
+    private void createWidgetIntent() {
+        //Create an intent so that we can send the broadcast to the BakingAppWidgetProvider
+        Intent intent = new Intent(this, BakingAppWidgetProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        //Send to the intent the widgetId again so that we can know which widget was clicked
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+        setResult(RESULT_OK, intent);
+        
+        //Send the broadcast
+        sendBroadcast(intent);
     }
 }

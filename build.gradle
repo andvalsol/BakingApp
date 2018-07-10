@@ -32,4 +32,5 @@ ext {
     lifecycle = "1.1.1"
     glide = "4.7.1"
     exoPlayer = "2.8.1"
+    gson = "2.8.4"
 }

@@ -1,21 +1,30 @@
 package com.example.luthiers.bakingapp.utils;
 
-import android.util.Log;
+import android.annotation.SuppressLint;
+import android.appwidget.AppWidgetManager;
+import android.content.Context;
+import android.content.SharedPreferences;
 
+import com.example.luthiers.bakingapp.BuildConfig;
 import com.example.luthiers.bakingapp.entities.Recipe;
 import com.example.luthiers.bakingapp.pojos.Ingredient;
 import com.example.luthiers.bakingapp.pojos.Step;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class RecipeUtils {
     //For each recipe
-    public static final String ID = "id"; //Make it a public field since it's used by the MainActivity
+    private static final String ID = "id";
     
     private static final String RECIPE_NAME = "name";
     private static final String RECIPE_LIST_OF_INGREDIENTS = "ingredients";
@@ -36,7 +45,6 @@ public class RecipeUtils {
     
     //Get a recipe pojo from the json string
     public static List<Recipe> getRecipesFromJsonResponse(String jsonResponse) {
-        
         try {
             //Create a JSONArray from the jsonResponse
             JSONArray results = new JSONArray(jsonResponse);
@@ -47,7 +55,7 @@ public class RecipeUtils {
             //Iterate over the results
             for (int n = 0; n < results.length(); n++) {
                 JSONObject jsonRecipe = results.getJSONObject(n);
-    
+                
                 //Create an array for the ingredients as a container
                 ArrayList<Ingredient> ingredients = new ArrayList<>();
                 
@@ -65,7 +73,7 @@ public class RecipeUtils {
                     
                     ingredients.add(ingredient);
                 }
-    
+                
                 //Create an array for the steps as a container
                 ArrayList<Step> steps = new ArrayList<>();
                 
@@ -76,11 +84,11 @@ public class RecipeUtils {
                     
                     //Create a step for each item inside the steps JSONArray
                     Step step = new Step(
-                           jsonStep.getInt(ID),
-                           jsonStep.getString(STEP_SHORT_DESCRIPTION),
-                           jsonStep.getString(STEP_DESCRIPTION),
-                           jsonStep.optString(STEP_VIDEO_URL, ""), //There could be a null value for video url
-                           jsonStep.optString(STEP_THUMBNAIL_URL, "") //There could be a null value for image url
+                            jsonStep.getInt(ID),
+                            jsonStep.getString(STEP_SHORT_DESCRIPTION),
+                            jsonStep.getString(STEP_DESCRIPTION),
+                            jsonStep.optString(STEP_VIDEO_URL, ""), //There could be a null value for video url
+                            jsonStep.optString(STEP_THUMBNAIL_URL, "") //There could be a null value for image url
                     );
                     
                     steps.add(step);
@@ -88,7 +96,7 @@ public class RecipeUtils {
                 
                 //Create each recipe object
                 Recipe recipe = new Recipe(
-                    jsonRecipe.getInt(ID),
+                        jsonRecipe.getInt(ID),
                         jsonRecipe.getString(RECIPE_NAME),
                         ingredients,
                         steps,
@@ -102,8 +110,39 @@ public class RecipeUtils {
             return recipes;
             
         } catch (JSONException e) {
-            Log.e("Exception", "The exception is: " + e.getMessage());
             return null;
         }
+    }
+    
+    /*
+     * Since we can not use Room because Room makes all tha calls in background services,
+     * We can get the list of ingredients from the SharedPreferences
+     * */
+    public static Recipe getRecipe(Context context) {
+        //Create a new Gson object, Gson is the fastest library to get small sets of Json data
+        Gson gson = new Gson();
+        
+        //Create a TypeToken for Gson to use
+        Type type = new TypeToken<Recipe>() {
+        }.getType();
+        
+        //Initialize a SharedPreferences object
+        SharedPreferences sharedPreferences = context.getSharedPreferences(BuildConfig.APPLICATION_ID, MODE_PRIVATE);
+        String jsonRecipe = sharedPreferences.getString(AppWidgetManager.EXTRA_APPWIDGET_ID, "");
+        
+        return gson.fromJson(jsonRecipe, type);
+    }
+    
+    @SuppressLint("ApplySharedPref") //We need to use apply since we need a linear logic
+    public static void saveRecipeInSharedPrefs(Context context, Recipe recipe) {
+        //Create a new Gson object, Gson is the fastest library to get small sets of Json data
+        Gson gson = new Gson();
+        
+        String jsonRecipe = gson.toJson(recipe);
+        
+        SharedPreferences sharedPreferences = context.getSharedPreferences(BuildConfig.APPLICATION_ID, MODE_PRIVATE);
+        sharedPreferences.edit()
+                .putString(AppWidgetManager.EXTRA_APPWIDGET_ID, jsonRecipe) //Save the correspond recipeId under the correspond widgetId
+                .commit();
     }
 }

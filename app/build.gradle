@@ -37,6 +37,7 @@ dependencies {
     implementation "com.google.android.exoplayer:exoplayer-core:${rootProject.exoPlayer}"
     implementation "com.google.android.exoplayer:exoplayer-dash:${rootProject.exoPlayer}"
     implementation "com.google.android.exoplayer:exoplayer-ui:${rootProject.exoPlayer}"
+    implementation "com.google.code.gson:gson:${rootProject.gson}"
 
     implementation "com.android.support.constraint:constraint-layout:${rootProject.constraintLayout}"
     implementation "android.arch.lifecycle:extensions:${rootProject.lifecycle}"
