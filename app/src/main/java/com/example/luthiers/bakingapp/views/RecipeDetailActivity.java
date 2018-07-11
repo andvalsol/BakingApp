@@ -25,9 +25,12 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
         
         //Set recipe if any bundle is passed to this activity
         setRecipe();
-    
+        
         //Create an instance of the RecipeDetailAdapter
-        RecipeDetailAdapter recipeDetailAdapter = new RecipeDetailAdapter(mRecipe.getSteps(), mRecipe.getIngredients(), this);
+        RecipeDetailAdapter recipeDetailAdapter = new RecipeDetailAdapter(mRecipe.getSteps(),
+                mRecipe.getIngredients(),
+                this,
+                this);
         
         //Create an instance of the recycler view
         RecyclerView recyclerView = findViewById(R.id.recycler_view);

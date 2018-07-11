@@ -1,5 +1,6 @@
 package com.example.luthiers.bakingapp.adapters;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -23,12 +24,18 @@ public class RecipeDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private List<Step> mSteps;
     private String mIngredients;
     private int numIngredients;
+    private Context mContext;
     private StepsClickListener mStepsClickListener;
     
-    public RecipeDetailAdapter(List<Step> steps, List<Ingredient> ingredients, StepsClickListener stepsClickListener) {
+    public RecipeDetailAdapter(List<Step> steps,
+                               List<Ingredient> ingredients,
+                               StepsClickListener stepsClickListener,
+                               Context context) {
         //Set the steps list and also the number of ingredients
         numIngredients = ingredients.size();
         mSteps = steps;
+        
+        mContext = context;
         
         mStepsClickListener = stepsClickListener;
         
@@ -148,7 +155,7 @@ public class RecipeDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         
         void bind(String ingredients, int numIngredients) {
             //Set the amount of ingredients to the tv_num_ingredients text view
-            mNumIngredients.setText(String.valueOf(numIngredients));
+            mNumIngredients.setText(String.valueOf(numIngredients) + mContext.getString(R.string._ingredients));
             
             mIngredient.setText(ingredients);
         }
