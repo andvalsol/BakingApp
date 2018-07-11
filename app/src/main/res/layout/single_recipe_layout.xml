@@ -3,51 +3,61 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    tools:layout_editor_absoluteY="81dp">
 
     <TextView
         android:id="@+id/tv_recipe_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/iv_recipe_image"
-        tools:layout_editor_absoluteY="16dp" />
+        android:layout_marginBottom="24dp"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/primaryText"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/iv_recipe_image"
+        app:layout_constraintTop_toBottomOf="@+id/iv_recipe_image" />
 
     <TextView
         android:id="@+id/tv_servings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
         android:drawablePadding="8dp"
-        android:gravity="center"
         android:drawableStart="@drawable/ic_servings"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_recipe_name" />
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="@color/secondaryText"
+        app:layout_constraintEnd_toEndOf="@+id/iv_recipe_image"
+        app:layout_constraintTop_toTopOf="@+id/tv_ingredients" />
 
     <TextView
         android:id="@+id/tv_ingredients"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
         android:drawablePadding="8dp"
+        android:drawableStart="@drawable/ic_ingredients"
         android:gravity="center"
-        android:drawableStart="@drawable/ic_servings"
-        app:layout_constraintStart_toEndOf="@+id/tv_servings"
-        app:layout_constraintTop_toBottomOf="@+id/tv_recipe_name" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="@color/secondaryText"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_recipe_name"
+        app:layout_constraintEnd_toStartOf="@+id/tv_servings"
+        app:layout_constraintTop_toTopOf="@+id/tv_recipe_name" />
 
     <ImageView
         android:id="@+id/iv_recipe_image"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
-        android:contentDescription="@string/recipe_image"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_servings"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/card_background"
+        android:contentDescription="@string/recipe_background"
+        android:fontFamily="@font/baloo_thambi"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
