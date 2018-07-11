@@ -110,8 +110,6 @@ public class RecipeDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             
             mVideoThumbnail = itemView.findViewById(R.id.iv_step);
             mVideoThumbnail.setOnClickListener(v -> {
-                
-                Log.d("Steps", "The adapter position is: " + getAdapterPosition());
                 mStepsClickListener.StepOnClick(mSteps.get(getAdapterPosition() - 1)); //We have to remove one since the first position comes from the ingredients
             });
             
@@ -155,7 +153,8 @@ public class RecipeDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         
         void bind(String ingredients, int numIngredients) {
             //Set the amount of ingredients to the tv_num_ingredients text view
-            mNumIngredients.setText(String.valueOf(numIngredients) + mContext.getString(R.string._ingredients));
+            String header = mContext.getString(R.string.total) + String.valueOf(numIngredients) + mContext.getString(R.string._ingredients);
+            mNumIngredients.setText(header);
             
             mIngredient.setText(ingredients);
         }

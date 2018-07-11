@@ -14,7 +14,6 @@ import com.example.luthiers.bakingapp.pojos.Step;
 
 public class RecipeDetailActivity extends AppCompatActivity implements RecipeDetailAdapter.StepsClickListener {
     
-    private Recipe mRecipe;
     private FragmentManager mFragmentManager;
     private boolean mIsTwoPane;
     
@@ -24,11 +23,14 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
         setContentView(R.layout.recipe_detail_layout);
         
         //Set recipe if any bundle is passed to this activity
-        setRecipe();
+        Recipe recipe = getRecipe();
+        
+        //Set the title of the activity to be the recipe name
+        setTitle(recipe.getName());
         
         //Create an instance of the RecipeDetailAdapter
-        RecipeDetailAdapter recipeDetailAdapter = new RecipeDetailAdapter(mRecipe.getSteps(),
-                mRecipe.getIngredients(),
+        RecipeDetailAdapter recipeDetailAdapter = new RecipeDetailAdapter(recipe.getSteps(),
+                recipe.getIngredients(),
                 this,
                 this);
         
@@ -46,15 +48,17 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
         mIsTwoPane = isTwoPane();
         
         if (mIsTwoPane) {
-            addMediaFragment(mRecipe.getSteps().get(0));
+            addMediaFragment(recipe.getSteps().get(0));
         }
     }
     
-    private void setRecipe() {
+    private Recipe getRecipe() {
         //Check if there are any information passed to this activity
         if (getIntent() != null && getIntent().getExtras().getParcelable("recipe") != null) {
-            mRecipe = getIntent().getExtras().getParcelable("recipe");
+            return getIntent().getExtras().getParcelable("recipe");
         }
+        
+        return null;
     }
     
     private void addMediaFragment(Step step) {

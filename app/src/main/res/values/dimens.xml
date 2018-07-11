@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="grid_item_max_size">200dp</dimen>
+    <dimen name="item_max_size">200dp</dimen>
 
     <dimen name="widget_size">180dp</dimen> <!--Using the formula (n * 70) - 30, n -> number of cells we want to use-->
 </resources>

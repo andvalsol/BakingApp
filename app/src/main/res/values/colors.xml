@@ -4,5 +4,5 @@
     <color name="colorPrimary">#ff80ab</color>
     <color name="transparentBlack">#66000000</color>
     <color name="primaryText">#263238</color>
-    <color name="secondaryText">#8C263238</color>
+    <color name="secondaryText">#B3263238</color> <!--70% black-->
 </resources>

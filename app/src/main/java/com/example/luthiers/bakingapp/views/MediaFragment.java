@@ -10,14 +10,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.luthiers.bakingapp.R;
 import com.example.luthiers.bakingapp.pojos.Step;
+import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
@@ -32,6 +39,7 @@ public class MediaFragment extends Fragment {
     private PlayerView mPlayerView;
     private ExoPlayer mExoPlayer;
     private TextView mTvDescription;
+    private ProgressBar mProgressBar;
     
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +57,9 @@ public class MediaFragment extends Fragment {
         
         //Check that the mStep instance and the tv_step_description are not null
         mTvDescription = view.findViewById(R.id.tv_step_description);
+        
+        //Initialize the progress bar
+        mProgressBar = view.findViewById(R.id.pb_media);
         
         if (isPortraitMode()) setPortraitView();
         else setLandscapeView();
@@ -90,6 +101,58 @@ public class MediaFragment extends Fragment {
         
         //Prepare the player to start buffer the data and set player to play when ready to begin playback automatically
         mExoPlayer.prepare(extractorMediaSource);
+        
+        mExoPlayer.addListener(new Player.EventListener() {
+            @Override
+            public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
+            }
+            
+            @Override
+            public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+            }
+            
+            @Override
+            public void onLoadingChanged(boolean isLoading) {
+            }
+            
+            @Override
+            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                if (playbackState == Player.STATE_BUFFERING) {
+                    mProgressBar.setVisibility(View.VISIBLE);
+                } else {
+                    mProgressBar.setVisibility(View.INVISIBLE);
+                }
+            }
+            
+            @Override
+            public void onRepeatModeChanged(int repeatMode) {
+            }
+            
+            @Override
+            public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+            
+            }
+            
+            @Override
+            public void onPlayerError(ExoPlaybackException error) {
+            
+            }
+            
+            @Override
+            public void onPositionDiscontinuity(int reason) {
+            
+            }
+            
+            @Override
+            public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+            
+            }
+            
+            @Override
+            public void onSeekProcessed() {
+            
+            }
+        });
         
         mExoPlayer.setPlayWhenReady(true);
     }

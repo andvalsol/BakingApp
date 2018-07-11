@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Re
     
     private int setGridColumns() {
         //Set the maximum size for the grid item
-        int gridItemMaxSize = getResources().getDimensionPixelSize(R.dimen.grid_item_max_size); //Max grid item is set as 160dp
+        int gridItemMaxSize = getResources().getDimensionPixelSize(R.dimen.item_max_size); //Max grid item is set as 200dp
         
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
