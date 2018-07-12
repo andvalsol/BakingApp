@@ -1,4 +1,4 @@
-package com.example.luthiers.bakingapp.views;
+package com.example.luthiers.bakingapp.views.media;
 
 
 import android.net.Uri;
@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,10 +41,27 @@ public class MediaFragment extends Fragment {
     private ExoPlayer mExoPlayer;
     private TextView mTvDescription;
     private ProgressBar mProgressBar;
+    private long mLastViewedPosition = 0; //Initialize the position to be 0
     
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    
+        Log.d("Mediaa", "onCreate called");
+        
+        //Get the arguments passed, if there are any
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            mStep = bundle.getParcelable("step");
+        }
+        
+        /*We want to save the position last position where the user saw the video
+        * in case there's a device orientation
+        * */
+        //Check that the savedInstanceState is not null
+        if (savedInstanceState != null) {
+            mLastViewedPosition = savedInstanceState.getLong("lastPosition", 0);
+        }
     }
     
     @Override
@@ -67,8 +85,12 @@ public class MediaFragment extends Fragment {
         return view;
     }
     
-    public void setStep(Step step) {
-        mStep = step;
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        
+        //Save the last viewed position
+        outState.putLong("lastPosition", mLastViewedPosition);
     }
     
     private boolean isPortraitMode() {
@@ -86,35 +108,37 @@ public class MediaFragment extends Fragment {
     }
     
     @Override
-    public void onStart() {
-        super.onStart();
-        
+    public void onResume() {
+        super.onResume();
+    
         mExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), new DefaultTrackSelector());
-        
+    
         //Bound the player to the player view
         mPlayerView.setPlayer(mExoPlayer);
-        
+    
         //Tell Exo Player what we want to play, provide a Factory for data sources and then specify a media source
         DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(getActivity(), Util.getUserAgent(getActivity(), "BakingApp"));
-        
+    
         ExtractorMediaSource extractorMediaSource = new ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse(mStep.getVideoURL()));//Since the url is a string we need to parse it to an Uri
-        
-        //Prepare the player to start buffer the data and set player to play when ready to begin playback automatically
+    
+        //Prepare the exo player to start buffer the data and set player to play when ready to begin playback automatically
         mExoPlayer.prepare(extractorMediaSource);
+        //Set the exo player to seek to the mLastViewedPosition, whatever that position is
+        mExoPlayer.seekTo(mLastViewedPosition);
         
         mExoPlayer.addListener(new Player.EventListener() {
             @Override
             public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
             }
-            
+        
             @Override
             public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
             }
-            
+        
             @Override
             public void onLoadingChanged(boolean isLoading) {
             }
-            
+        
             @Override
             public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
                 if (playbackState == Player.STATE_BUFFERING) {
@@ -123,44 +147,47 @@ public class MediaFragment extends Fragment {
                     mProgressBar.setVisibility(View.INVISIBLE);
                 }
             }
-            
+        
             @Override
             public void onRepeatModeChanged(int repeatMode) {
             }
-            
+        
             @Override
             public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
-            
             }
-            
+        
             @Override
             public void onPlayerError(ExoPlaybackException error) {
-            
             }
-            
+        
             @Override
             public void onPositionDiscontinuity(int reason) {
-            
             }
-            
+        
             @Override
             public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-            
             }
-            
+        
             @Override
             public void onSeekProcessed() {
-            
             }
         });
-        
+    
         mExoPlayer.setPlayWhenReady(true);
     }
     
     @Override
-    public void onStop() {
-        super.onStop();
-        //Release all resources
+    public void onPause() {
+        //Get the last viewed position
+        mLastViewedPosition = mExoPlayer.getCurrentPosition();
+    
+        //Proceed to release the Exo Player
+        releaseExoPlayer();
+        
+        super.onPause();
+    }
+    
+    private void releaseExoPlayer() {
         mPlayerView.setPlayer(null);
         mExoPlayer.release();
         mExoPlayer = null;

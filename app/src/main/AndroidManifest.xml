@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".views.RecipeDetailActivity" />
-        <activity android:name=".views.MediaActivity" />
+        <activity android:name=".views.media.MediaActivity" />
 
         <receiver android:name=".views.BakingAppWidgetProvider">
             <intent-filter>

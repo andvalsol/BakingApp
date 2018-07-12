@@ -10,7 +10,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 
-import com.example.luthiers.bakingapp.MainActivityViewModel;
+import com.example.luthiers.bakingapp.viewModels.MainActivityViewModel;
 import com.example.luthiers.bakingapp.R;
 import com.example.luthiers.bakingapp.adapters.RecipesAdapter;
 import com.example.luthiers.bakingapp.entities.Recipe;

@@ -1,4 +1,4 @@
-package com.example.luthiers.bakingapp;
+package com.example.luthiers.bakingapp.viewModels;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;

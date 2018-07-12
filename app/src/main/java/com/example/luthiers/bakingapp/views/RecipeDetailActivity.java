@@ -6,11 +6,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.example.luthiers.bakingapp.R;
 import com.example.luthiers.bakingapp.adapters.RecipeDetailAdapter;
 import com.example.luthiers.bakingapp.entities.Recipe;
 import com.example.luthiers.bakingapp.pojos.Step;
+import com.example.luthiers.bakingapp.views.media.MediaActivity;
+import com.example.luthiers.bakingapp.views.media.MediaFragment;
 
 public class RecipeDetailActivity extends AppCompatActivity implements RecipeDetailAdapter.StepsClickListener {
     
@@ -48,7 +51,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
         mIsTwoPane = isTwoPane();
         
         if (mIsTwoPane) {
-            addMediaFragment(recipe.getSteps().get(0));
+            openMediaFragment(recipe.getSteps().get(0));
         }
     }
     
@@ -61,15 +64,21 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
         return null;
     }
     
-    private void addMediaFragment(Step step) {
+    private void openMediaFragment(Step step) {
+        Log.d("Mediaa", "2openMediaFragment called");
+        
+        //Create a new bundle object so that it can be attached to the MediaFragment object
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("step", step);
+        
         //Create an instance of the MediaFragment
         MediaFragment mediaFragment = new MediaFragment();
-        //Pass the step to the MediaFragment instance, by default pass the first element
-        mediaFragment.setStep(step);
+        //Add to the mediaFragment object the bundle instance
+        mediaFragment.setArguments(bundle);
         
         //Since it's in two pane mode, set the MediaFragment in the fl_recipe_detail_container fragment container
         mFragmentManager.beginTransaction()
-                .add(R.id.fl_recipe_detail_container, mediaFragment)
+                .replace(R.id.fl_recipe_detail_container, mediaFragment) //We need to use replace since we don't want any overlapping
                 .commit();
     }
     
@@ -80,7 +89,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
     @Override
     public void StepOnClick(Step step) {
         //Check if we've a two pane mode or not
-        if (mIsTwoPane) addMediaFragment(step);
+        if (mIsTwoPane) openMediaFragment(step);
         else openMediaActivity(step);
     }
     
