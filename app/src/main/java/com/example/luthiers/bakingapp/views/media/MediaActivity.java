@@ -59,7 +59,7 @@ public class MediaActivity extends AppCompatActivity {
         mMediaFragment.setArguments(bundle);
         
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fl_recipe_detail_container, mMediaFragment) //We don't want overlapping fragments
+                .replace(R.id.fl_recipe_detail_container, mMediaFragment) //We don't want overlapping fragments
                 .commit();
     }
 }

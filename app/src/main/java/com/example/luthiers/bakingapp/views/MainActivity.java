@@ -18,7 +18,7 @@ import com.example.luthiers.bakingapp.utils.RecipeUtils;
 
 public class MainActivity extends AppCompatActivity implements RecipesAdapter.RecipesOnClickListener {
     
-    private int mAppWidgetId = -1; //Set widgetId to be -1 as default
+    private boolean mFirstCreated;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +28,9 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Re
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
-            //The user has entered this activity to set a determined recipe as a widget
-            mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
-    
+            //Check there's widget information
+            mFirstCreated = extras.getBoolean("created");
+            
             //Open the RecipeDetailActivity with the respective recipe
             String jsonRecipe = extras.getString("recipe", "");
             if (!jsonRecipe.isEmpty()) {
@@ -82,11 +82,9 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Re
     @Override
     public void recipesOnClick(Recipe recipe) {
         //Check if the user wants to open the recipe or wants to set the recipe as a widget
-        if (mAppWidgetId == -1) {
-            //Open the RecipeDetailActivity sending the proper recipe to it
-            startRecipeDetailActivity(recipe);
-            
-        } else {
+        if (!mFirstCreated) startRecipeDetailActivity(recipe);
+        
+        else {
             createWidgetIntent(recipe);
             
             //Finish the activity and all its back stack
@@ -106,8 +104,6 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Re
         //Create an intent so that we can send the broadcast to the BakingAppWidgetProvider
         Intent intent = new Intent(this, BakingAppWidgetProvider.class);
         intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        //Send to the intent the widgetId again so that we can know which widget was clicked
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
         intent.putExtra("recipe", RecipeUtils.getJsonFromRecipe(recipe));
         
         setResult(RESULT_OK, intent);

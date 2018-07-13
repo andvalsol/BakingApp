@@ -23,12 +23,8 @@ import java.util.List;
 public class BakingAppWidgetProvider extends AppWidgetProvider {
     
     private RemoteViews mRemoteViews;
-    private int mAppWidgetId = -1; //Set the appWidgetId to be -1
     
     private void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
-        mAppWidgetId = appWidgetId;
-    
-        Log.d("WidgetId", "1The widgetId is: " + mAppWidgetId);
         //Set the widget
         mRemoteViews = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
         
@@ -44,41 +40,31 @@ public class BakingAppWidgetProvider extends AppWidgetProvider {
         mRemoteViews = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
         
         if (intent.getAction().equals(AppWidgetManager.ACTION_APPWIDGET_ENABLED)) {
-            //Reset value for mAppWidgetId
-            mAppWidgetId = -1;
-    
-            Log.d("WidgetId", "2The widgetId is: " + mAppWidgetId);
+            Intent intent1 = new Intent(context, MainActivity.class);
+            //Send to the intent that the widget was initially created
+            intent1.putExtra("created", true);
+            //We need to create a new task as we create the activity
+            intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             
+            context.startActivity(intent1);
         } else if (intent.getAction().equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
-            Log.d("WidgetId", "3The widgetId is: " + mAppWidgetId);
-    
-            if (mAppWidgetId != -1) {
-                Intent intent1 = new Intent(context, MainActivity.class);
-                //Pass the widgetId to the intent
-                intent1.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-                //We need to create a new task as we create the activity
-                intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //Get the correspond recipe from the intent and the widgetId
+            String jsonRecipe = intent.getExtras().getString("recipe");
+            int widgetId = intent.getExtras().getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
+            
+            //Get the recipe from the json string
+            Recipe recipe = RecipeUtils.getRecipeFromJson(jsonRecipe);
+            
+            //The gotten object can be null
+            if (recipe != null) {
+                //Set the views for the widget
+                Log.d("WidgetId", "3The widgetId is: " + widgetId);
                 
-                context.startActivity(intent1);
-            } else {
-                //Get the correspond recipe from the intent and the widgetId
-                String jsonRecipe = intent.getExtras().getString("recipe");
-                int widgetId = intent.getExtras().getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
+                setRemoteViews(recipe, context, widgetId);
                 
-                //Get the recipe from the json string
-                Recipe recipe = RecipeUtils.getRecipeFromJson(jsonRecipe);
-                
-                //The gotten object can be null
-                if (recipe != null) {
-                    //Set the views for the widget
-                    Log.d("WidgetId", "3The widgetId is: " + widgetId);
-    
-                    setRemoteViews(recipe , context, widgetId);
-                    
-                    //Now that we got the recipe and set the proper name for the recipe we need to update the widget
-                    AppWidgetManager.getInstance(context).updateAppWidget(
-                            new ComponentName(context, BakingAppWidgetProvider.class), mRemoteViews);
-                }
+                //Now that we got the recipe and set the proper name for the recipe we need to update the widget
+                AppWidgetManager.getInstance(context).updateAppWidget(
+                        new ComponentName(context, BakingAppWidgetProvider.class), mRemoteViews);
             }
         }
     }
@@ -129,7 +115,7 @@ public class BakingAppWidgetProvider extends AppWidgetProvider {
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
             Log.d("WidgetId", "5The widgetId is: " + appWidgetId);
-    
+            
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
     }
