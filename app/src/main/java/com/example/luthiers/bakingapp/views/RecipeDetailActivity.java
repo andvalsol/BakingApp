@@ -23,6 +23,9 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("Meedia", "RecipeDetailActivity onCreate called");
+    
+    
         setContentView(R.layout.recipe_detail_layout);
         
         //Set recipe if any bundle is passed to this activity
@@ -66,7 +69,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
     
     private void openMediaFragment(Step step) {
         Log.d("Mediaa", "2openMediaFragment called");
-        
         //Create a new bundle object so that it can be attached to the MediaFragment object
         Bundle bundle = new Bundle();
         bundle.putParcelable("step", step);
@@ -83,7 +85,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
     }
     
     private boolean isTwoPane() {
-        return (findViewById(R.id.ll_recipe_detail_land) != null);
+        return (findViewById(R.id.fl_recipe_detail_container) != null);
     }
     
     @Override

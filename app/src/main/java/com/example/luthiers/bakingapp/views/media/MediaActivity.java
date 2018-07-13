@@ -17,6 +17,8 @@ public class MediaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.frame_layout);
         
+        Log.d("Meedia", "MediaActivity onCreate called");
+        
         //For persistence we need to save the fragment state
         //Check if savedInstanceState is not null
         if (savedInstanceState != null) {
@@ -49,8 +51,6 @@ public class MediaActivity extends AppCompatActivity {
     }
     
     private void openMediaFragment(Step step) {
-        Log.d("Mediaa", "openMediaFragment called");
-        
         //Create a new bundle object so that it can be attached to the MediaFragment object
         Bundle bundle = new Bundle();
         bundle.putParcelable("step", step);
@@ -59,7 +59,7 @@ public class MediaActivity extends AppCompatActivity {
         mMediaFragment.setArguments(bundle);
         
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame_layout, mMediaFragment) //We don't want overlapping fragments
+                .add(R.id.fl_recipe_detail_container, mMediaFragment) //We don't want overlapping fragments
                 .commit();
     }
 }

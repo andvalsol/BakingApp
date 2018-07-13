@@ -1,6 +1,5 @@
 package com.example.luthiers.bakingapp.views.media;
 
-
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -47,8 +46,8 @@ public class MediaFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     
-        Log.d("Mediaa", "onCreate called");
-        
+        Log.d("Meedia", "MediaFragment onCreate called");
+    
         //Get the arguments passed, if there are any
         Bundle bundle = this.getArguments();
         if (bundle != null) {
