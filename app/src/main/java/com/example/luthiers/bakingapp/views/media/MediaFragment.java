@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,13 +39,14 @@ public class MediaFragment extends Fragment {
     private ExoPlayer mExoPlayer;
     private TextView mTvDescription;
     private ProgressBar mProgressBar;
+    
+    //For savedInstanceStated variables
     private long mLastViewedPosition = 0; //Initialize the position to be 0
+    private boolean mIsPlaybackReady;
     
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    
-        Log.d("Meedia", "MediaFragment onCreate called");
     
         //Get the arguments passed, if there are any
         Bundle bundle = this.getArguments();
@@ -59,7 +59,11 @@ public class MediaFragment extends Fragment {
         * */
         //Check that the savedInstanceState is not null
         if (savedInstanceState != null) {
+            //Get the last viewed position
             mLastViewedPosition = savedInstanceState.getLong("lastPosition", 0);
+            
+            //Get if the playback is ready to be played
+            mIsPlaybackReady = savedInstanceState.getBoolean("playbackReady", false);
         }
     }
     
@@ -90,6 +94,8 @@ public class MediaFragment extends Fragment {
         
         //Save the last viewed position
         outState.putLong("lastPosition", mLastViewedPosition);
+        //Save if the playback is ready to play
+        outState.putBoolean("playbackReady", mIsPlaybackReady);
     }
     
     private boolean isPortraitMode() {
@@ -172,18 +178,23 @@ public class MediaFragment extends Fragment {
             }
         });
     
-        mExoPlayer.setPlayWhenReady(true);
+        mExoPlayer.setPlayWhenReady(mIsPlaybackReady);
     }
     
     @Override
     public void onPause() {
-        //Get the last viewed position
-        mLastViewedPosition = mExoPlayer.getCurrentPosition();
+        saveExoPlayerState();
     
         //Proceed to release the Exo Player
         releaseExoPlayer();
         
         super.onPause();
+    }
+    
+    private void saveExoPlayerState() {
+        //Get the last viewed position
+        mLastViewedPosition = mExoPlayer.getCurrentPosition();
+        mIsPlaybackReady = mExoPlayer.getPlayWhenReady();
     }
     
     private void releaseExoPlayer() {
