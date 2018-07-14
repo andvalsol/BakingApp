@@ -3,6 +3,10 @@ package com.example.luthiers.bakingapp.views;
 import android.appwidget.AppWidgetManager;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -10,6 +14,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 
+import com.example.luthiers.bakingapp.testing.SimpleIdlingResource;
 import com.example.luthiers.bakingapp.viewModels.MainActivityViewModel;
 import com.example.luthiers.bakingapp.R;
 import com.example.luthiers.bakingapp.adapters.RecipesAdapter;
@@ -60,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.Re
             if (recipes != null) {
                 recipesAdapter.setRecipes(recipes);
             }
+            
+            RecipeUtils.setSimpleIdlingResourceIdleState(true);
         });
     }
     

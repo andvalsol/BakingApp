@@ -25,6 +25,9 @@ public class RecipeRepository {
     public LiveData<List<Recipe>> getRecipes() {
         mAppExecutors.getDiskIO().execute(() -> {
             try {
+                //Initialize the IdlingResource state to be false
+                RecipeUtils.setSimpleIdlingResourceIdleState(false);
+                
                 //Get the jsonResponse from the RecipeNetworkDataSource
                 String jsonResponse = RecipeNetworkDataSource.setupHttpConnection();
                 

@@ -22,13 +22,13 @@
         android:layout_margin="16dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:textColor="@android:color/white"
-        android:textSize="24sp" />
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/tv_widget_recipe_ingredients"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_widget_recipe_name"
-        android:layout_margin="16dp" />
+        android:layout_margin="8dp" />
 
 </RelativeLayout>

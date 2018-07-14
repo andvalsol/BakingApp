@@ -9,6 +9,7 @@ import com.example.luthiers.bakingapp.BuildConfig;
 import com.example.luthiers.bakingapp.entities.Recipe;
 import com.example.luthiers.bakingapp.pojos.Ingredient;
 import com.example.luthiers.bakingapp.pojos.Step;
+import com.example.luthiers.bakingapp.testing.SimpleIdlingResource;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -42,6 +43,9 @@ public class RecipeUtils {
     private static final String STEP_DESCRIPTION = "description";
     private static final String STEP_VIDEO_URL = "videoURL";
     private static final String STEP_THUMBNAIL_URL = "thumbnailURL";
+    
+    //For testing
+    private static SimpleIdlingResource sSimpleIdlingResource;
     
     //Get a recipe pojo from the json string
     public static List<Recipe> getRecipesFromJsonResponse(String jsonResponse) {
@@ -134,5 +138,26 @@ public class RecipeUtils {
         Gson gson = new Gson();
     
         return gson.toJson(recipe);
+    }
+    
+    /*
+    * For testing purposes we constructed the SimpleIdlingResource
+    * */
+    
+    public static SimpleIdlingResource getSimpleIdlingResourceState() {
+        //Check that the simpleIdlingResource instance is not null
+        if (sSimpleIdlingResource == null) {
+            sSimpleIdlingResource = new SimpleIdlingResource();
+        }
+        return sSimpleIdlingResource;
+    }
+    
+    public static void setSimpleIdlingResourceIdleState(boolean isIdle) {
+        //Check that the simpleIdlingResource is not null
+        if (sSimpleIdlingResource == null) {
+            sSimpleIdlingResource = new SimpleIdlingResource();
+        }
+        
+        sSimpleIdlingResource.setIdleState(isIdle);
     }
 }

@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModel;
 
 import com.example.luthiers.bakingapp.entities.Recipe;
 import com.example.luthiers.bakingapp.repository.RecipeRepository;
+import com.example.luthiers.bakingapp.testing.SimpleIdlingResource;
 import com.example.luthiers.bakingapp.utils.AppExecutors;
 
 import java.util.List;
